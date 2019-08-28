@@ -16,6 +16,8 @@ Flowers-102 : http://www.robots.ox.ac.uk/~vgg/data/flowers/102/
 
 The data path has to be set the following way : dataset/train/classes/images for the training set, dataset/test/classes/images for the test set.
 
+We used the following repositories :
+
 # DARTS
 Paper : Liu, Hanxiao, Karen Simonyan, and Yiming Yang. "Darts: Differentiable architecture search." arXiv preprint arXiv:1806.09055 (2018). 
 
@@ -57,7 +59,7 @@ Paper : Luo, Renqian, et al. "Neural architecture optimization." Advances in neu
 
 Official Pytorch implementation : https://github.com/renqianluo/NAO_pytorch
 
-# AutoAugment :
+# AutoAugment
 Paper : Cubuk, Ekin D., et al. "Autoaugment: Learning augmentation policies from data." arXiv preprint arXiv:1805.09501 (2018).
 
 Unofficial Pytorch implementation : https://github.com/DeepVoltaire/AutoAugment

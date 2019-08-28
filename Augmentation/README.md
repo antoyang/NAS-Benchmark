@@ -1,4 +1,4 @@
-# Augmentation 
+# Comparing different augmentation protocols
 
 ## Generate a Random Architecture 
 

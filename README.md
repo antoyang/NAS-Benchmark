@@ -1,6 +1,6 @@
 # NAS-Benchmark
 
-This repository includes the codes used to evaluate NAS methods on 5 different datasets, as well as the code used to augment architectures with different protocols, as mentioned in our paper.
+This repository includes the codes used to evaluate NAS methods on 5 different datasets, as well as the code used to augment architectures with different protocols, as mentioned in our paper. Scripts exemples are provided in each folder.
 
 # Data
 

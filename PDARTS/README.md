@@ -1,4 +1,4 @@
-# [Progressive Differentiable Architecture Search: Bridging the Depth Gap between Search and Evaluation]
+# Progressive Differentiable Architecture Search
 
 ## Generate a Random Architecture 
 

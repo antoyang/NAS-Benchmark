@@ -15,7 +15,7 @@ arch_reduce = [links[0], ops[8], links[1], ops[9], links[0], ops[10], links[1], 
 links[0], ops[14], links[1], ops[15], links[0], ops[18], links[1], ops[19]]
 op = {0:"sep_conv_3x3", 1:"sep_conv_5x5", 2:"avg_pool_3x3", 3:"max_pool_3x3", 4:"skip_connect"}
 
-#Convert from ENAS encoding to DARTS genotype
+# Convert from ENAS encoding to DARTS genotype
 
 genotype = {}
 genotype["normal"]=[]

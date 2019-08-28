@@ -37,8 +37,8 @@ python train_cifar.py
 --cutout_size 16 
 --l2_reg 3e-4 
 --arch arch 
---channels=36 
---batch_size=128 
+--channels 36 
+--batch_size 128 
 --output_dir test 
 --data /data # path to data
 --dataset CIFAR10 # choose between CIFAR10 and CIFAR100

@@ -2,9 +2,9 @@
 
 This repository includes the codes used to evaluate NAS methods on 5 different datasets, as well as the code used to augment architectures with different protocols, as mentioned in our paper.
 
-# data
+# Data
 
-In this folder, you will find the data splits for Sport-8, MIT-67 and Flowers-102 in .csv files.
+In the data folder, you will find the data splits for Sport-8, MIT-67 and Flowers-102 in .csv files.
 
 You can download these datasets on the following sites :
 

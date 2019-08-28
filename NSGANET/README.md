@@ -1,4 +1,4 @@
-# NSGA-Net
+# NSGA-Net: Neural Architecture Search using Multi-Objective Genetic Algorithm
 
 ## Generate random architectures
 ```

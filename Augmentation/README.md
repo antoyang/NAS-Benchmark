@@ -1,4 +1,4 @@
-# Augmentation : repository used to evaluate different augmentation protocols
+# Augmentation 
 
 ## Generate a Random Architecture 
 

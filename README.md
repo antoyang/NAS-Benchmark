@@ -5,10 +5,16 @@ This repository includes the codes used to evaluate NAS methods on 5 different d
 # data
 
 In this folder, you will find the data splits for Sport-8, MIT-67 and Flowers-102 in .csv files.
+
 You can download these datasets on the following sites :
+
 Sport-8 : http://vision.stanford.edu/lijiali/event_dataset/
+
 MIT-67 : http://web.mit.edu/torralba/www/indoor.html
+
 Flowers-102 : http://www.robots.ox.ac.uk/~vgg/data/flowers/102/
+
+The data path has to be set the following way : dataset/train/classes/images for the training set, dataset/test/classes/images for the test set.
 
 # DARTS
 Paper : Liu, Hanxiao, Karen Simonyan, and Yiming Yang. "Darts: Differentiable architecture search." arXiv preprint arXiv:1806.09055 (2018). 

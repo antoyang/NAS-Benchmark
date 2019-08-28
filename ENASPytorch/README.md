@@ -1,14 +1,10 @@
-# ENAS CIFAR-10 Implementation in PyTorch
-"Efficient Neural Architecture Search via Parameter Sharing" 
+# ENAS PyTorch
 
-Used for experiments on Sport8 and MIT67
-
-## Requirements
-
-PyTorch 0.4.0+
+Used for experiments on Sport8, MIT67 and flowers102
 
 ## Generate a random architecture
 
+```
 import numpy.random as rd
 B = 5
 ops = rd.randint(0, 5, 4*B) #5 ops, B nodes
@@ -28,13 +24,17 @@ for i in range(B):
     genotype["reduce"].append(cnr)
 genotype["normal_concat"]=range(2,2+B)
 genotype["reduce_concat"]=range(2,2+B)
+```
 
 ## Search
 
-dataset = "Sport8" #or "MIT67"
-batchsize = 16
-datapath = "/data" #path to data
-python train_search.py --dataset dataset --data datapath --batch_size batchsize --save test
+```
+python train_search.py 
+--dataset Sport8 # choose between Sport8, MIT67 and flowers102
+--data /data # path to data
+--batch_size 16
+--save test
+```
 
 ## Augment
 

@@ -47,7 +47,7 @@ Unofficial Pytorch implementation : https://github.com/MengTianjian/enas-pytorch
 ## MANAS 
 Paper : To be released
 
-Implementation : provided by the authors
+Implementation : provided by the authors. 
 
 ## NSGA-NET
 Paper : Lu, Zhichao, et al. "NSGA-NET: a multi-objective genetic algorithm for neural architecture search." arXiv preprint arXiv:1810.03522 (2018).

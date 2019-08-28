@@ -48,16 +48,16 @@ For other datasets :
 
 ```
 python train_imagenet.py 
---layers 2 
---arch arch 
 --use_aux_head 
---batch_size 96 
---epochs 600 
---channels 36 
 --keep_prob 0.6 
 --drop_path_keep_prob 0.8 
 --cutout_size 16 
 --l2_reg 3e-4 
+--arch arch 
+--channels 36 
+--batch_size 96 
+--layers 2 
+--epochs 600 
 --output_dir test
 --data /data # path to data
 --dataset sport8 # choose between sport8, mit67 and flowers102

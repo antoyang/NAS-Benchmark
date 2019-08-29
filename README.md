@@ -25,6 +25,7 @@ Unofficial updated implementation : https://github.com/khanrc/pt.darts
 
 ## P-DARTS
 Paper : Xin Chen, Lingxi Xie, Jun Wu, Qi Tian, Progressive Differentiable Architecture Search: Bridging the Depth Gap between Search and Evaluation, ICCV, 2019.
+
 Official implementation : https://github.com/chenxin061/pdarts
 
 ## CNAS

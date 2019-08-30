@@ -359,6 +359,8 @@ def main():
             genotype = parse_network(switches_normal, switches_reduce)
             logging.info(genotype)
             save_genotype(args.save + 'genotype.json', genotype)
+            with open(args.save + "/best_genotype.txt", "w") as f:
+                f.write(str(genotype))
     gpu_logger.stop()
 
 

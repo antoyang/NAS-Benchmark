@@ -115,7 +115,7 @@ class Network(nn.Module):
         nn.Conv2d(C, C, 3, stride=2, padding=1, bias=False),
         nn.BatchNorm2d(C),
       )
-      c_prev_prev, c_prev, c_curr = C, C, C
+      C_prev_prev, C_prev, C_curr = C, C, C
     else:
       C_curr = stem_multiplier*C
       self.stem = nn.Sequential(
@@ -125,7 +125,7 @@ class Network(nn.Module):
       C_prev_prev, C_prev, C_curr = C_curr, C_curr, C
 
     self.cells = nn.ModuleList()
-    reduction_prev = False
+    reduction_prev = self.largemode
     for i in range(layers):
       if i in [layers//3, 2*layers//3]:
         C_curr *= 2

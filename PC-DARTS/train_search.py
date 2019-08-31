@@ -45,11 +45,13 @@ parser.add_argument('--arch_weight_decay', type=float, default=1e-3, help='weigh
 args = parser.parse_args()
 
 #args.save = 'search-{}-{}'.format(args.save, time.strftime("%Y%m%d-%H%M%S"))
-utils.create_exp_dir(args.save, scripts_to_save=glob.glob('*.py'))
+#utils.create_exp_dir(args.save, scripts_to_save=glob.glob('*.py'))
 
 log_format = '%(asctime)s %(message)s'
 logging.basicConfig(stream=sys.stdout, level=logging.INFO,
     format=log_format, datefmt='%m/%d %I:%M:%S %p')
+if not os.path.exists(args.save):
+    os.makedirs(args.save)
 fh = logging.FileHandler(os.path.join(args.save, 'log.txt'))
 fh.setFormatter(logging.Formatter(log_format))
 logging.getLogger().addHandler(fh)
@@ -95,25 +97,25 @@ def main():
 
   train_transform, valid_transform = utils.data_transforms(args.dataset, args.cutout, args.cutout_length)
   if args.dataset == "CIFAR100":
-    train_data = dset.CIFAR100(root=args.tmp_data_dir, train=True, download=True, transform=train_transform)
+    train_data = dset.CIFAR100(root=args.datapath, train=True, download=True, transform=train_transform)
   elif args.dataset == "CIFAR10":
-    train_data = dset.CIFAR10(root=args.tmp_data_dir, train=True, download=True, transform=train_transform)
+    train_data = dset.CIFAR10(root=args.datapath, train=True, download=True, transform=train_transform)
   elif args.dataset == 'MIT67':
     dset_cls = dset.ImageFolder
-    data_path = '%s/MIT67/train' % args.tmp_data_dir  # 'data/MIT67/train'
-    val_path = '%s/MIT67/test' % args.tmp_data_dir  # 'data/MIT67/val'
+    data_path = '%s/MIT67/train' % args.datapath  # 'data/MIT67/train'
+    val_path = '%s/MIT67/test' % args.datapath  # 'data/MIT67/val'
     train_data = dset_cls(root=data_path, transform=train_transform)
     valid_data = dset_cls(root=val_path, transform=valid_transform)
   elif args.dataset == 'Sport8':
     dset_cls = dset.ImageFolder
-    data_path = '%s/Sport8/train' % args.tmp_data_dir  # 'data/Sport8/train'
-    val_path = '%s/Sport8/test' % args.tmp_data_dir  # 'data/Sport8/val'
+    data_path = '%s/Sport8/train' % args.datapath  # 'data/Sport8/train'
+    val_path = '%s/Sport8/test' % args.datapath  # 'data/Sport8/val'
     train_data = dset_cls(root=data_path, transform=train_transform)
     valid_data = dset_cls(root=val_path, transform=valid_transform)
   elif args.dataset == "flowers102":
     dset_cls = dset.ImageFolder
-    data_path = '%s/flowers102/train' % args.tmp_data_dir
-    val_path = '%s/flowers102/test' % args.tmp_data_dir
+    data_path = '%s/flowers102/train' % args.datapath
+    val_path = '%s/flowers102/test' % args.datapath
     train_data = dset_cls(root=data_path, transform=train_transform)
     valid_data = dset_cls(root=val_path, transform=valid_transform)
 
@@ -191,13 +193,13 @@ def train(train_queue, valid_queue, model, architect, criterion, optimizer, lr,e
     loss = criterion(logits, target)
 
     loss.backward()
-    nn.utils.clip_grad_norm(model.parameters(), args.grad_clip)
+    nn.utils.clip_grad_norm_(model.parameters(), args.grad_clip)
     optimizer.step()
 
     prec1, prec5 = utils.accuracy(logits, target, topk=(1, 5))
-    objs.update(loss.data[0], n)
-    top1.update(prec1.data[0], n)
-    top5.update(prec5.data[0], n)
+    objs.update(loss.data.item(), n)
+    top1.update(prec1.data.item(), n)
+    top5.update(prec5.data.item(), n)
 
     if step % args.report_freq == 0:
       logging.info('train %03d %e %f %f', step, objs.avg, top1.avg, top5.avg)
@@ -212,18 +214,19 @@ def infer(valid_queue, model, criterion):
   model.eval()
 
   for step, (input, target) in enumerate(valid_queue):
-    #input = input.cuda()
-    #target = target.cuda(non_blocking=True)
-    input = Variable(input, volatile=True).cuda()
-    target = Variable(target, volatile=True).cuda(async=True)
-    logits = model(input)
-    loss = criterion(logits, target)
+    input = input.cuda()
+    target = target.cuda(non_blocking=True)
+    #input = Variable(input).cuda()
+    #target = Variable(target).cuda(async=True)
+    with torch.no_grad():
+      logits = model(input)
+      loss = criterion(logits, target)
 
     prec1, prec5 = utils.accuracy(logits, target, topk=(1, 5))
     n = input.size(0)
-    objs.update(loss.data[0], n)
-    top1.update(prec1.data[0], n)
-    top5.update(prec5.data[0], n)
+    objs.update(loss.data.item(), n)
+    top1.update(prec1.data.item(), n)
+    top5.update(prec5.data.item(), n)
 
     if step % args.report_freq == 0:
       logging.info('valid %03d %e %f %f', step, objs.avg, top1.avg, top5.avg)

@@ -59,6 +59,68 @@ class Cutout(object):
         img *= mask
         return img
 
+def data_transforms(dataset, cutout, cutout_length):
+    if dataset in LARGE_DATASETS:
+        MEAN = [0.485, 0.456, 0.406]
+        STD = [0.229, 0.224, 0.225]
+        transf_train = [
+            transforms.RandomResizedCrop(224),
+            transforms.RandomHorizontalFlip(),
+            transforms.ColorJitter(
+                brightness=0.4,
+                contrast=0.4,
+                saturation=0.4,
+                hue=0.2)
+        ]
+        transf_val = [
+            transforms.Resize(256),
+            transforms.CenterCrop(224),
+        ]
+        normalize = [
+            transforms.ToTensor(),
+            transforms.Normalize(MEAN, STD)
+        ]
+        train_transform = transforms.Compose(transf_train + normalize)
+        if cutout:
+            train_transform.transforms.append(Cutout(cutout_length))
+        valid_transform = transforms.Compose(transf_val + normalize)
+        return train_transform, valid_transform
+    if dataset == "CIFAR10":
+        CIFAR_MEAN = [0.49139968, 0.48215827, 0.44653124]
+        CIFAR_STD = [0.24703233, 0.24348505, 0.26158768]
+
+        train_transform = transforms.Compose([
+            transforms.RandomCrop(32, padding=4),
+            transforms.RandomHorizontalFlip(),
+            transforms.ToTensor(),
+            transforms.Normalize(CIFAR_MEAN, CIFAR_STD),
+        ])
+        if cutout:
+            train_transform.transforms.append(Cutout(cutout_length))
+
+        valid_transform = transforms.Compose([
+            transforms.ToTensor(),
+            transforms.Normalize(CIFAR_MEAN, CIFAR_STD),
+        ])
+        return train_transform, valid_transform
+    if dataset == "CIFAR100":
+        CIFAR_MEAN = [0.5071, 0.4867, 0.4408]
+        CIFAR_STD = [0.2675, 0.2565, 0.2761]
+
+        train_transform = transforms.Compose([
+            transforms.RandomCrop(32, padding=4),
+            transforms.RandomHorizontalFlip(),
+            transforms.ToTensor(),
+            transforms.Normalize(CIFAR_MEAN, CIFAR_STD),
+        ])
+        if cutout:
+            train_transform.transforms.append(Cutout(cutout_length))
+
+        valid_transform = transforms.Compose([
+            transforms.ToTensor(),
+            transforms.Normalize(CIFAR_MEAN, CIFAR_STD),
+        ])
+        return train_transform, valid_transform
 
 def _data_transforms_cifar10(args):
   CIFAR_MEAN = [0.49139968, 0.48215827, 0.44653124]

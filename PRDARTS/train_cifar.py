@@ -15,7 +15,7 @@ import torchvision.datasets as dset
 import torch.backends.cudnn as cudnn
 from tensorboardX import SummaryWriter
 from gpu_thread import GpuLogThread
-from model import NetworkCIFAR as Network
+from model import NetworkCIFAR as Network, NetworkImageNet as NetworkLarge
 
 
 parser = argparse.ArgumentParser("cifar")
@@ -55,11 +55,13 @@ args.cutout = args.cutout.lower().startswith('t')
 #args.cifar100 = args.cifar100.lower().startswith('t')
 
 # args.save = '{}eval-{}-{}'.format(args.save, args.note, time.strftime("%Y%m%d-%H%M%S"))
-utils.create_exp_dir(args.save, scripts_to_save=glob.glob('*.py'))
+# utils.create_exp_dir(args.save, scripts_to_save=glob.glob('*.py'))
 
 log_format = '%(asctime)s   %(message)s'
 logging.basicConfig(stream=sys.stdout, level=logging.INFO,
                     format=log_format, datefmt='%d.%m.%y %H:%M:%S')
+if not os.path.exists(args.save):
+    os.makedirs(args.save)
 fh = logging.FileHandler(os.path.join(args.save, 'log.txt'))
 fh.setFormatter(logging.Formatter(log_format))
 logging.getLogger().addHandler(fh)
@@ -98,7 +100,10 @@ def main():
     elif args.dataset == "flowers102":
         dset_cls = dset.ImageFolder
         CLASSES = 102
-    model = Network(args.init_channels, CLASSES, args.layers, args.auxiliary, genotype, largemode=True if args.dataset in utils.LARGE_DATASETS else False)
+    if args.dataset in utils.LARGE_DATASETS:
+        model = NetworkLarge(args.init_channels, CLASSES, args.layers, args.auxiliary, genotype)
+    else:
+        model = Network(args.init_channels, CLASSES, args.layers, args.auxiliary, genotype)
     if num_gpus > 1:
         model = nn.DataParallel(model)
     model = model.cuda()
@@ -113,8 +118,10 @@ def main():
     train_transform, valid_transform = utils.data_transforms(args.dataset, args.cutout, args.cutout_length)
     if args.dataset == "CIFAR100":
         train_data = dset.CIFAR100(root=args.tmp_data_dir, train=True, download=True, transform=train_transform)
+        valid_data = dset.CIFAR100(root=args.tmp_data_dir, train=False, download=True, transform=valid_transform)
     elif args.dataset == "CIFAR10":
         train_data = dset.CIFAR10(root=args.tmp_data_dir, train=True, download=True, transform=train_transform)
+        valid_data = dset.CIFAR10(root=args.tmp_data_dir, train=False, download=True, transform=valid_transform)
     elif args.dataset == 'MIT67':
         dset_cls = dset.ImageFolder
         data_path = '%s/MIT67/train' % args.tmp_data_dir  # 'data/MIT67/train'

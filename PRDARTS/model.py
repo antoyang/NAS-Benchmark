@@ -105,36 +105,20 @@ class AuxiliaryHeadImageNet(nn.Module):
 
 class NetworkCIFAR(nn.Module):
 
-    def __init__(self, C, num_classes, layers, auxiliary, genotype, largemode=False):
+    def __init__(self, C, num_classes, layers, auxiliary, genotype):
         super(NetworkCIFAR, self).__init__()
         self._layers = layers
         self._auxiliary = auxiliary
-        self.largemode=largemode
         stem_multiplier = 3
-        if self.largemode:
-            self.stem0 = nn.Sequential(
-                nn.Conv2d(3, C // 2, kernel_size=3, stride=2, padding=1, bias=False),
-                nn.BatchNorm2d(C // 2),
-                nn.ReLU(inplace=True),
-                nn.Conv2d(C // 2, C, 3, stride=2, padding=1, bias=False),
-                nn.BatchNorm2d(C),
-            )
 
-            self.stem1 = nn.Sequential(
-                nn.ReLU(inplace=True),
-                nn.Conv2d(C, C, 3, stride=2, padding=1, bias=False),
-                nn.BatchNorm2d(C),
-            )
-            C_prev_prev, C_prev, C_curr = C, C, C
-        else:
-            C_curr = stem_multiplier*C
-            self.stem = nn.Sequential(
-                nn.Conv2d(3, C_curr, 3, padding=1, bias=False),
-                nn.BatchNorm2d(C_curr)
-            )
-            C_prev_prev, C_prev, C_curr = C_curr, C_curr, C
+        C_curr = stem_multiplier*C
+        self.stem = nn.Sequential(
+            nn.Conv2d(3, C_curr, 3, padding=1, bias=False),
+            nn.BatchNorm2d(C_curr)
+        )
+        C_prev_prev, C_prev, C_curr = C_curr, C_curr, C
         self.cells = nn.ModuleList()
-        reduction_prev = largemode
+        reduction_prev = False
         for i in range(layers):
             if i in [layers//3, 2*layers//3]:
                 C_curr *= 2
@@ -154,11 +138,7 @@ class NetworkCIFAR(nn.Module):
 
     def forward(self, input_):
         logits_aux = None
-        if self.largemode:
-            s0 = self.stem0(input_)
-            s1 = self.stem1(s0)
-        else:
-            s0 = s1 = self.stem(input_)
+        s0 = s1 = self.stem(input_)
         for i, cell in enumerate(self.cells):
             s0, s1 = s1, cell(s0, s1, self.drop_path_prob)
             if i == 2*self._layers//3:

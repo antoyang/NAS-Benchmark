@@ -30,7 +30,7 @@ parser.add_argument('--workers', type=int, default=2, help='number of workers to
 parser.add_argument('--gpu', type=int, default=0, help='GPU device id')
 parser.add_argument('--report_freq', type=float, default=50, help='report frequency')
 parser.add_argument('--seed', type=int, default=0, help='random seed')
-parser.add_argument('--save', type=str, default='/tmp/pdarts/', help='experiment path')
+parser.add_argument('--save', type=str, default='/', help='experiment path')
 parser.add_argument('--tmp_data_dir', type=str, default='~/Data/Datasets/cifar10_data/', help='temp data dir')
 parser.add_argument('--train_portion', type=float, default=0.5, help='portion of training data')
 parser.add_argument('--dataset', type=str, default='CIFAR10', choices=["CIFAR10","CIFAR100","Sport8","MIT67","flowers102"], help='search with different datasets')
@@ -86,11 +86,13 @@ args.num_morphs = [int(n) for n in str(args.num_morphs).replace(' ', '').split('
 
 PRIMITIVES = get_init_ops(args.primitives)
 morph_restrictions = get_morph_restrictions(args.morph_restrictions)
-utils.create_exp_dir(args.save, scripts_to_save=glob.glob('*.py'))
+#utils.create_exp_dir(args.save, scripts_to_save=glob.glob('*.py'))
 
 log_format = "[%(filename)s:%(lineno)s - %(funcName)20s()] %(message)s" if args.test else '%(asctime)s   %(message)s'
 logging.basicConfig(stream=sys.stdout, level=logging.DEBUG if args.test else logging.INFO,
                     format=log_format, datefmt='%d.%m.%y %H:%M:%S')
+if not os.path.exists(args.save):
+    os.makedirs(args.save)
 fh = logging.FileHandler(os.path.join(args.save, 'log.txt'))
 fh.setFormatter(logging.Formatter(log_format))
 logging.getLogger().addHandler(fh)

@@ -60,6 +60,16 @@ Paper : Luo, Renqian, et al. "Neural architecture optimization." Advances in neu
 
 Official Pytorch implementation : https://github.com/renqianluo/NAO_pytorch
 
+## PC-DARTS 
+Paper : Xu, Yuhui, et al. "PC-DARTS: Partial Channel Connections for Memory-Efficient Differentiable Architecture Search." arXiv preprint arXiv:1907.05737 (2019).
+
+Official implementation : https://github.com/yuhuixu1993/PC-DARTS
+
+## PRDARTS
+Paper : Laube, Kevin Alexander, and Andreas Zell. "Prune and Replace NAS." arXiv preprint arXiv:1906.07528 (2019).
+
+Official implementation : https://github.com/cogsys-tuebingen/prdarts
+
 ## AutoAugment
 Paper : Cubuk, Ekin D., et al. "Autoaugment: Learning augmentation policies from data." arXiv preprint arXiv:1805.09501 (2018).
 

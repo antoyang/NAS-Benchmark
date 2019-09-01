@@ -1,6 +1,6 @@
 # Prune and Replace NAS
 
-## Generate a Random Architecture:
+## Generate a Random Architecture
 
 ```
 morph_restrictions='r_depth'

@@ -1,100 +1,123 @@
-## Introduction
+# PC-DARTS
 
-**PC-DARTS** is a memory-efficient differentiable architecture method based on **DARTS**. It mainly focuses on reducing the large memory cost of the super-net in one-shot NAS method, which means that it can also be combined with other one-shot NAS method e.g. **ENAS**. Different from previous methods that sampling operations, PC-DARTS samples channels of the constructed super-net. For a detailed description of technical details and experimental results, please refer to our paper:
-
-[Partial Channel Connections for Memory-Efficient Differentiable Architecture Search](https://arxiv.org/pdf/1907.05737.pdf)
-
-[Yuhui Xu](http://yuhuixu1993.github.io), [Lingxi Xie](http://lingxixie.com/), [Xiaopeng Zhang](https://sites.google.com/site/zxphistory/), Xin Chen, [Guo-Jun Qi](http://www.eecs.ucf.edu/~gqi/), [Qi Tian](https://scholar.google.com/citations?user=61b6eYkAAAAJ&hl=zh-CN) and Hongkai Xiong.
-
-**This code is based on the implementation of  [DARTS](https://github.com/quark0/darts).**
-## Updates
-The implementation of random sampling is also uploaded for your consideration.
-
-## Results
-### Results on CIFAR10
-Method | Params(M) | Error(%)| Search-Cost
---- | --- | --- | ---
-AmoebaNet-B|2.8|2.55|3150
-DARTSV1 | 3.3 | 3.00 | 0.4
-DARTSV2 | 3.3 | 2.76 | 1.0
-SNAS    | 2.8 | 2.85 |1.5
-PC-DARTS | 3.6 | **2.57** | **0.1**
-
-Only **0.1 GPU-days** are used for a search on CIFAR-10!
-### Results on ImageNet
-Method | FLOPs |Top-1 Error(%)|Top-5 Error(%)| Search-Cost
---- | --- | --- | --- | ---
-NASNet-A |564|26.0|8.4|1800
-AmoebaNet-B|570|24.3|7.6|3150
-PNAS     |588 |25.8 |8.1|225
-DARTSV2 | 574 | 26.7 | 8.7 | 1.0
-SNAS    | 522 | 27.3 | 9.3 |1.5
-PC-DARTS | 597 | **24.2** | **7.3** | 3.8
-
-Search a good arcitecture on ImageNet by using the search space of DARTS(**First Time!**).
-## Usage
-
-To run our code, you only need one Nvidia 1080ti(11G memory).
-```
-python train_search.py \\
-```
-
-#### The evaluation process simply follows that of DARTS.
-
-##### Here is the evaluation on CIFAR10:
+## Generate a Random Architecture
 
 ```
-python train.py \\
-       --auxiliary \\
-       --cutout \\
+from model_search import Network
+from genotypes import PRIMITIVES
+from genotypes import Genotype
+
+import copy
+import random
+import torch.nn.functional as F
+
+n_ops = 8
+n_nodes = 4
+S = 0
+for i in range(4):
+    S = S + 2 + i
+
+switches = []
+for i in range(S):
+    switches.append([True for j in range(n_ops)])
+switches_normal = copy.deepcopy(switches)
+switches_reduce = copy.deepcopy(switches)
+for i in range(S):
+    # excluding zero operations
+    switches_normal[i][0] = False
+    switches_reduce[i][0] = False
+    idxs = [1 + i for i in range(n_ops - 1)]
+    # randomly 6 dropping operations out of the 7 possible
+    drop_normal = random.sample(idxs, n_ops - 2)
+    drop_reduce = random.sample(idxs, n_ops - 2)
+    for idx in drop_normal:
+        switches_normal[i][idx] = False
+    for idx in drop_normal:
+        switches_reduce[i][idx] = False
+model = Network(16, 10, 20, None)
+model = model.cuda()
+
+# Generate architecture
+sm_dim = -1
+arch_param = model.arch_parameters()
+normal_prob = F.softmax(arch_param[0], dim=sm_dim).data.cpu().numpy()
+reduce_prob = F.softmax(arch_param[1], dim=sm_dim).data.cpu().numpy()
+normal_final = [0 for idx in range(S)]
+reduce_final = [0 for idx in range(S)]
+keep_normal = [0, 1]
+keep_reduce = [0, 1]
+n = 3
+start = 2
+for i in range(3):
+    end = start + n
+    tbsn = normal_final[start:end]
+    tbsr = reduce_final[start:end]
+    edge_n = random.sample([k for k in range(n)], 2)
+    keep_normal.append(edge_n[-1] + start)
+    keep_normal.append(edge_n[-2] + start)
+    edge_r = random.sample([k for k in range(n)], 2)
+    keep_reduce.append(edge_r[-1] + start)
+    keep_reduce.append(edge_r[-2] + start)
+    start = end
+    n = n + 1
+for i in range(S):
+    if not i in keep_normal:
+        for j in range(n_ops):
+            switches_normal[i][j] = False
+    if not i in keep_reduce:
+        for j in range(n_ops):
+            switches_reduce[i][j] = False
+
+
+def parse_network(switches_normal, switches_reduce):
+
+    def _parse_switches(switches):
+        n = 2
+        start = 0
+        gene = []
+        step = 4
+        for i in range(step):
+            end = start + n
+            for j in range(start, end):
+                for k in range(len(switches[j])):
+                    if switches[j][k]:
+                        gene.append((PRIMITIVES[k], j - start))
+            start = end
+            n = n + 1
+        return gene
+
+    gene_normal = _parse_switches(switches_normal)
+    gene_reduce = _parse_switches(switches_reduce)
+
+    concat = range(2, 6)
+
+    genotype = Genotype(
+        normal=gene_normal, normal_concat=concat,
+        reduce=gene_reduce, reduce_concat=concat
+    )
+
+    return genotype
+
+genotype = parse_network(switches_normal, switches_reduce)
 ```
 
-##### Here is the evaluation on ImageNet (mobile setting):
-```
-python train_imagenet.py \\
-       --tmp_data_dir /path/to/your/data \\
-       --save log_path \\
-       --auxiliary \\
-       --note note_of_this_run
-```
-## Pretrained models
-Coming soon!.
-
-## Notes
-- For the codes in the main branch, `python2 with pytorch(3.0.1)` is recommended （running on `Nvidia 1080ti`）. We also provided codes in the `V100_python1.0` if you want to implement PC-DARTS on `Tesla V100` with `python3+` and `pytorch1.0+`.
-
-- You can even run the codes on a GPU with memory only **4G**. PC-DARTS only costs less than 4G memory, if we use the same hyper-parameter settings as DARTS(batch-size=64).
-
-- You can search on ImageNet by `model_search_imagenet.py`! The training file for search on ImageNet will be uploaded after it is cleaned or you can generate it according to the train_search file on CIFAR10 and the evluate file on ImageNet. Hyperparameters are reported in our paper! The search cost 11.5 hours on 8 V100 GPUs(16G each). If you have V100(32G) you can further increase the batch-size.  
-
-- We random sample 10% and 2.5% from each class of training dataset of ImageNet. There are still 1000 classes! Replace `input_search, target_search = next(iter(valid_queue))` with following codes would be much faster:
+## Search
 
 ```
-    try:
-      input_search, target_search = next(valid_queue_iter)
-    except:
-      valid_queue_iter = iter(valid_queue)
-      input_search, target_search = next(valid_queue_iter)
+python train_search.py 
+--dataset CIFAR10 # choose between CIFAR10, CIFAR100, Sport8, MIT67 and flowers102
+--datapath /data # path to your data 
+--save test
 ```
 
-- The main codes of PC-DARTS are in the file `model_search.py`. As descriped in the paper, we use an efficient way to implement the channel sampling. First, a fixed sub-set of the input is selected to be fed into the candidate operations, then the concated output is swaped. Two efficient swap operations are provided: channel-shuffle and channel-shift. For the edge normalization, we define edge parameters(beta in our codes) along with the alpha parameters in the original darts codes. 
+# Augment
 
-- The implementation of random sampling is also provided `model_search_random.py`. It also works while channel-shuffle may have better performance.
-
-- As PC-DARTS is an ultra memory-efficient NAS methods. It has potentials to be implemnted on other tasks such as detection and segmentation.
-
-## Related work
-
-[Progressive Differentiable Architecture Search](https://github.com/chenxin061/pdarts)
-
-[Differentiable Architecture Search](https://github.com/quark0/darts)
-## Reference
-
-If you use our code in your research, please cite our paper accordingly.
-```Latex
-@article{xu2019pcdarts,
-  title={Partial Channel Connections for Memory-Efficient Differentiable Architecture Search},
-  author={Xu, Yuhui and Xie, Lingxi and Zhang, Xiaopeng and Chen, Xin and Qi, Guo-Jun and Tian, Qi and Xiong, Hongkai},
-  journal={arXiv preprint arXiv:1907.05737},
-  year={2019}
-}
+```
+python train.py 
+--dataset CIFAR10 # choose between CIFAR10, CIFAR100, Sport8, MIT67 and flowers102
+--datapath /data # path to your data 
+--save test  
+--auxiliary 
+--cutout 
+--arch genotype
+--layers 20 #20 for CIFAR datasets, 8 for Sport8, MIT67 and flowers102

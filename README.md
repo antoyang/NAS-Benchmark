@@ -33,7 +33,7 @@ Paper : Weng, Yu, et al. "Automatic Convolutional Neural Architecture Search for
 
 Official implementation : https://github.com/tianbaochou/CNAS
 
-## iDARTS
+## StacNAS
 Paper : To be released
 
 Implementation : provided by the authors

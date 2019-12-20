@@ -1,6 +1,6 @@
 # NAS-Benchmark
 
-This repository includes the codes used to evaluate NAS methods on 5 different datasets, as well as the code used to augment architectures with different protocols, as mentioned in our paper. Scripts exemples are provided in each folder.
+This repository includes the codes used to evaluate NAS methods on 5 different datasets, as well as the code used to augment architectures with different protocols, as mentioned in our ICLR2020 paper. Scripts exemples are provided in each folder.
 
 ## Data
 
@@ -59,6 +59,9 @@ Official implementation : https://github.com/ianwhale/nsga-net
 Paper : Luo, Renqian, et al. "Neural architecture optimization." Advances in neural information processing systems. 2018.
 
 Official Pytorch implementation : https://github.com/renqianluo/NAO_pytorch
+
+
+For the two following methods, we have not yet performed consistent experiments (therefore the methods are not included in the paper). Nonetheless, we provide runnable code that could provide relevant insights (similar to those provided in the paper on the other methods) on these methods.
 
 ## PC-DARTS 
 Paper : Xu, Yuhui, et al. "PC-DARTS: Partial Channel Connections for Memory-Efficient Differentiable Architecture Search." arXiv preprint arXiv:1907.05737 (2019).

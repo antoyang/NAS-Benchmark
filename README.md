@@ -6,7 +6,7 @@ This repository includes the code used to evaluate NAS methods on 5 different da
 
 In the data folder, you will find the data splits for Sport-8, MIT-67 and Flowers-102 in .csv files.
 
-You can download these datasets on the following sites :
+You can download these datasets on the following web sites :
 
 Sport-8 : http://vision.stanford.edu/lijiali/event_dataset/
 

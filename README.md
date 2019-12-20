@@ -34,7 +34,7 @@ Paper : Weng, Yu, et al. "Automatic Convolutional Neural Architecture Search for
 Official implementation : https://github.com/tianbaochou/CNAS
 
 ## StacNAS
-Paper : To be released
+Paper : Guilin Li et al. "StacNAS: Towards Stable and Consistent Differentiable Neural Architecture Search." 	arXiv preprint  arXiv:1909.11926 (2019).
 
 Implementation : provided by the authors
 
@@ -46,7 +46,7 @@ Official Tensorflow implementation : https://github.com/melodyguan/enas
 Unofficial Pytorch implementation : https://github.com/MengTianjian/enas-pytorch
 
 ## MANAS 
-Paper : To be released
+Paper : Maria Carlucci, Fabio, et al. "MANAS: Multi-Agent Neural Architecture Search." arXiv preprint arXiv:1909.01051 (2019).
 
 Implementation : provided by the authors. 
 

@@ -1,6 +1,6 @@
 # NAS-Benchmark
 
-This repository includes the code used to evaluate NAS methods on 5 different datasets, as well as the code used to augment architectures with different protocols, as mentioned in our ICLR2020 paper (https://openreview.net/forum?id=HygrdpVKvr). Scripts exemples are provided in each folder.
+This repository includes the code used to evaluate NAS methods on 5 different datasets, as well as the code used to augment architectures with different protocols, as mentioned in our ICLR2020 paper (https://arxiv.org/abs/1912.12522). Scripts exemples are provided in each folder.
 
 ## Data
 

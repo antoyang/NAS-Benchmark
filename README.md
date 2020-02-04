@@ -84,6 +84,8 @@ Paper : Cubuk, Ekin D., et al. "Autoaugment: Learning augmentation policies from
 
 Unofficial Pytorch implementation : https://github.com/DeepVoltaire/AutoAugment
 
+## Citation
+
 If you found this work useful, consider citing for now:
 
 ```

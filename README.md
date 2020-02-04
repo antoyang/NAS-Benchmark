@@ -2,6 +2,12 @@
 
 This repository includes the code used to evaluate NAS methods on 5 different datasets, as well as the code used to augment architectures with different protocols, as mentioned in our ICLR2020 paper (https://arxiv.org/abs/1912.12522). Scripts exemples are provided in each folder.
 
+## Plots
+All code used to generate the plots of the paper can be found in the "Plots" folder.
+
+## 214 Randomly sampled architectures
+You can find the training logs in Plots\data\modified_search_space\214_random_architectures.npy
+
 ## Data
 
 In the data folder, you will find the data splits for Sport-8, MIT-67 and Flowers-102 in .csv files.
@@ -78,3 +84,15 @@ Paper : Cubuk, Ekin D., et al. "Autoaugment: Learning augmentation policies from
 
 Unofficial Pytorch implementation : https://github.com/DeepVoltaire/AutoAugment
 
+If you found this work useful, consider citing for now:
+
+```
+@misc{yang2019nas,
+    title={NAS evaluation is frustratingly hard},
+    author={Antoine Yang and Pedro M. Esperança and Fabio M. Carlucci},
+    year={2019},
+    eprint={1912.12522},
+    archivePrefix={arXiv},
+    primaryClass={cs.LG}
+}
+```

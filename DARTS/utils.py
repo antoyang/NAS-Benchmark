@@ -17,7 +17,7 @@ def get_data(dataset, data_root, cutout_length, validation):
     if dataset == 'cifar10':
         dset_cls = dset.CIFAR10
         n_classes = 10
-    if dataset == 'cifar100':
+    elif dataset == 'cifar100':
         dset_cls = dset.CIFAR100
         n_classes = 100
     elif dataset == 'mnist':

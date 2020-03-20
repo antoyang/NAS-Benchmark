@@ -6,7 +6,7 @@ This repository includes the code used to evaluate NAS methods on 5 different da
 All code used to generate the plots of the paper can be found in the "Plots" folder.
 
 ## Randomly Sampled Architectures
-You can find the training logs in Plots\data\modified_search_space.
+You can find all sampled architectures and corresponding training logs in Plots\data\modified_search_space.
 
 ## Data
 

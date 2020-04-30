@@ -3,9 +3,7 @@
 This repository includes the code used to evaluate NAS methods on 5 different datasets, as well as the code used to augment architectures with different protocols, as mentioned in our ICLR2020 paper (https://arxiv.org/abs/1912.12522). Scripts exemples are provided in each folder.
 
 ## News
-ICLR2020 will be hosted virtually and we will be available for discussion and questions during our Poster Sessions, Wednesday 6 12:00 to 14:00 and 17:00 to 19:00 GMT (https://iclr.cc/virtual/poster_HygrdpVKvr.html).
-
-A 5 min video (with associated slides) presenting the paper will also be made public for the conference.
+The slides and video from our ICLR2020 poster presentation will be made available during May. Thanks for those who came chatting with us during our virtual poster sessions! 
 
 ## Plots
 All code used to generate the plots of the paper can be found in the "Plots" folder.
@@ -91,15 +89,15 @@ Unofficial Pytorch implementation : https://github.com/DeepVoltaire/AutoAugment
 
 ## Citation
 
-If you found this work useful, consider citing for now:
+If you found this work useful, consider citing us:
 
 ```
-@misc{yang2019nas,
-    title={NAS evaluation is frustratingly hard},
-    author={Antoine Yang and Pedro M. Esperança and Fabio M. Carlucci},
-    year={2019},
-    eprint={1912.12522},
-    archivePrefix={arXiv},
-    primaryClass={cs.LG}
+@inproceedings{
+Yang2020NAS,
+title={NAS evaluation is frustratingly hard},
+author={Antoine Yang and Pedro M. Esperança and Fabio M. Carlucci},
+booktitle={International Conference on Learning Representations},
+year={2020},
+url={https://openreview.net/forum?id=HygrdpVKvr}
 }
 ```

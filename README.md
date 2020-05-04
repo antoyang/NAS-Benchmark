@@ -3,7 +3,7 @@
 This repository includes the code used to evaluate NAS methods on 5 different datasets, as well as the code used to augment architectures with different protocols, as mentioned in our ICLR2020 paper (https://arxiv.org/abs/1912.12522). Scripts exemples are provided in each folder.
 
 ## ICLR2020 video poster presentation
-The video from our ICLR2020 poster presentation are available at https://iclr.cc/virtual_2020/poster_HygrdpVKvr.html.
+The video from our ICLR2020 poster presentation is available at https://iclr.cc/virtual_2020/poster_HygrdpVKvr.html.
 
 ## Plots
 All code used to generate the plots of the paper can be found in the "Plots" folder.
